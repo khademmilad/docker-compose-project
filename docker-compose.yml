@@ -65,6 +65,3 @@ services:
 volumes:
   wordpress:
   mysql-db:
-
-# networks:
-#   glusterfs-network
