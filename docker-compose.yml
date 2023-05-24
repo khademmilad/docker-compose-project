@@ -60,8 +60,34 @@ services:
       - '8080:80'
     links:
       - mysql:mysql
+  
+  db:
+    image: postgres:alpine3.17
+    container_name: ${APP_NAME}-postgres
+    volumes:
+      - mydb-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+  
+  django_app:
+    build: .
+    container_name: ${APP_NAME}-django
+    volumes:
+      - static_vol:/app/static
+      - media_vol:/app/media
+      - ./src:/app
+    command: python manage.py runserver 0.0.0.0:9000
+    ports:
+      - '9000:9000'
+    env_file:
+      - .env
+    depends_on:
+      - db
 
 
 volumes:
   wordpress:
   mysql-db:
+  mydb-data:
+  static_vol:
+  media_vol:
